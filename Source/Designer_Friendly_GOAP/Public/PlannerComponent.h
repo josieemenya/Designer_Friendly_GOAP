@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Copyright Josephine Emenya 2026. All Rights Reserved.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -9,13 +8,6 @@
 #include "PlannerComponent.generated.h"
 
 class UBlackboardComponent;
-
-
-////////////////////////////////////////////////////
-///
-///
-///
-///
 
 UCLASS(Config=Game, DefaultConfig)
 class DESIGNER_FRIENDLY_GOAP_API UPlannerLoggerSettings : public UDeveloperSettings

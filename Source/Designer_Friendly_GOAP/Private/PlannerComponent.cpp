@@ -1,3 +1,5 @@
+// Copyright Josephine Emenya 2026. All Rights Reserved.
+
 #include "PlannerComponent.h"
 #include "AIController.h"
 
@@ -246,8 +248,17 @@ void UPlannerComponent::UpdateSmartObjects(FWorldState& Current)
 	AllSmartObjectsNearby.Empty();
 
 	auto Owner = Cast<AAIController>(GetOwner());
-	auto AI = (Owner) ? Owner->GetPawn() : Cast<APawn>(GetOwner());
-	// owner shouldl either be the pawn itself or the controller
+	
+	APawn* AI = nullptr;
+
+	if (Owner)
+	{
+		AI = Owner->GetPawn();
+	}
+	else
+	{
+		AI = Cast<APawn>(GetOwner());
+	}
 
 	if (AI)
 	{

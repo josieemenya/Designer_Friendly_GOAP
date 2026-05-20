@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Copyright Josephine Emenya 2026. All Rights Reserved.
 
 #include "GPController.h"
 #include "BrainComponent.h"
