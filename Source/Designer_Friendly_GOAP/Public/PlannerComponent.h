@@ -71,7 +71,7 @@ struct Node
 	UAction* Action;
 	Node* Parent;
 	float gCost, fCost, hCost;
-	Node() : State{}, Parent(nullptr), Action{}, gCost(0), fCost(0), hCost(0) {}
+	Node() : State{}, Action{}, Parent(nullptr), gCost(0), fCost(0), hCost(0) {}
 	Node(FWorldState &State) : State(State) {}
 	Node(FWorldState State, UAction* Action, Node* Parent, float gCost, float fCost, float hCost) : State(State), Action(Action), Parent(Parent), gCost(gCost), fCost(fCost), hCost(hCost) {};
 	bool operator==(const Node& Other) const
