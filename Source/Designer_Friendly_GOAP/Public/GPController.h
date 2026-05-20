@@ -15,7 +15,7 @@ class UAIPerceptionComponent;
  */
 
 
-
+DECLARE_LOG_CATEGORY_EXTERN(LogGPController, Log, All);
 
 UCLASS()
 class DESIGNER_FRIENDLY_GOAP_API AGPController : public AAIController

@@ -20,6 +20,7 @@
 #include "Navigation/PathFollowingComponent.h"
 #include "UtilityWorldSystem.h"
 
+DEFINE_LOG_CATEGORY(LogGOAP)
 
 float UGoal::GetUtility_Implementation(const UBlackboardComponent* BlackBoard)
 {
@@ -30,7 +31,7 @@ void UPlannerLogger::Log(const FString& Message)
 {
 	if (ShouldShowLogs)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *Message);
+		UE_LOG(LogGOAP, Warning, TEXT("%s"), *Message);
 	}
 }
 
@@ -119,7 +120,7 @@ TArray<UAction*> UPlannerComponent::PlanGoal(FWorldState& InitialWorldState, FWo
 
 		if (count > 100)
 		{
-			UE_LOG(LogTemp, Error, TEXT("PLANNER GOT STUCK IN INFINITE LOOP, PLEASE DEBUG!!!!!!!"));
+			UE_LOG(LogGOAP, Error, TEXT("PLANNER GOT STUCK IN INFINITE LOOP, PLEASE DEBUG!!!!!!!"));
 			break;
 		}
 		// find lowestCost
@@ -140,7 +141,7 @@ TArray<UAction*> UPlannerComponent::PlanGoal(FWorldState& InitialWorldState, FWo
 			GetWorld()->GetSubsystem<UPlannerLogger>()->Log("----Starting Action Stack----");
 			for (UAction* Action : ToDoStack)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Printing ToDoStack Action: %s"), *Action->Name.ToString())
+				UE_LOG(LogGOAP, Warning, TEXT("Printing ToDoStack Action: %s"), *Action->Name.ToString())
 			}
 			GetWorld()->GetSubsystem<UPlannerLogger>()->Log("----Ending Action Stack----");
 
@@ -152,16 +153,16 @@ TArray<UAction*> UPlannerComponent::PlanGoal(FWorldState& InitialWorldState, FWo
 		}
 
 		// filter against valid actions,  check against precomditions
-		UE_LOG(LogTemp, Warning, TEXT("PlanGoal running, CurrentNode->State keys = %d"), CurrentNode->State.StateValues.Num());
+		UE_LOG(LogGOAP, Warning, TEXT("PlanGoal running, CurrentNode->State keys = %d"), CurrentNode->State.StateValues.Num());
 
 
 		auto validActions = ActionList; //FilterAvailableActions(ActionList, CurrentNode->State);
 
-		UE_LOG(LogTemp, Warning, TEXT("[GOAP] ValidActions = %d"), validActions.Num());
+		UE_LOG(LogGOAP, Warning, TEXT("[GOAP] ValidActions = %d"), validActions.Num());
 
 		// filter actions that satisfy our goal, 
 		auto satisfyingActions = FilterSatisfyingActions(validActions, CurrentNode->State);
-		UE_LOG(LogTemp, Warning, TEXT("[GOAP] SatisfyingActions = %d"), satisfyingActions.Num());
+		UE_LOG(LogGOAP, Warning, TEXT("[GOAP] SatisfyingActions = %d"), satisfyingActions.Num());
 
 		for (const auto& possibleAction : satisfyingActions)
 		{
@@ -184,7 +185,7 @@ TArray<UAction*> UPlannerComponent::PlanGoal(FWorldState& InitialWorldState, FWo
 				}
 				else
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Negative effect no supposrted. for now."))
+					UE_LOG(LogGOAP, Warning, TEXT("Negative effect no supposrted. for now."))
 				}
 			}
 
@@ -195,8 +196,8 @@ TArray<UAction*> UPlannerComponent::PlanGoal(FWorldState& InitialWorldState, FWo
 			Child->fCost = Child->gCost + Child->hCost;
 			Open.Add(Child);
 
-			UE_LOG(LogTemp, Warning, TEXT("Open size: %d"), Open.Num())
-			UE_LOG(LogTemp, Warning, TEXT("SOpen: %d Close: %d"), Open.Num(), Close.Num());
+			UE_LOG(LogGOAP, Warning, TEXT("Open size: %d"), Open.Num())
+			UE_LOG(LogGOAP, Warning, TEXT("SOpen: %d Close: %d"), Open.Num(), Close.Num());
 		}
 	}
 
@@ -226,7 +227,7 @@ TArray<UAction*> UPlannerComponent::FilterSatisfyingActions(TArray<UAction*> Act
 
 TArray<UAction*> UPlannerComponent::FilterAvailableActions(TArray<UAction*> Actions, FWorldState CurrentState)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("FilterAvailableActions called, AvailableActions.Num() = %d"), Actions.Num());
+	//UE_LOG(LogGOAP, Warning, TEXT("FilterAvailableActions called, AvailableActions.Num() = %d"), Actions.Num());
 
 	TArray<UAction*> ResultActionList;
 
@@ -235,7 +236,7 @@ TArray<UAction*> UPlannerComponent::FilterAvailableActions(TArray<UAction*> Acti
 		if (!Instance) continue;
 
 
-		UE_LOG(LogTemp, Warning, TEXT("Checking action %s"), *Instance->Name.ToString());
+		UE_LOG(LogGOAP, Warning, TEXT("Checking action %s"), *Instance->Name.ToString());
 
 		ResultActionList.Add(Instance);
 	}
@@ -269,12 +270,12 @@ void UPlannerComponent::UpdateSmartObjects(FWorldState& Current)
 		}
 		else
 		{
-			//UE_LOG(LogTemp, Error, TEXT("No PerceptionComponent on BaseAI"));
+			//UE_LOG(LogGOAP, Error, TEXT("No PerceptionComponent on BaseAI"));
 		}
 	}
 	else
 	{
-		//UE_LOG(LogTemp, Error, TEXT("Owning AI is not a pawn, or a controller"));
+		//UE_LOG(LogGOAP, Error, TEXT("Owning AI is not a pawn, or a controller"));
 	}
 
 	for (ASmartObject* SmartObj : LastSmartObjectContainer->RegisteredObjects)
@@ -289,13 +290,13 @@ void UPlannerComponent::UpdateSmartObjects(FWorldState& Current)
 	{
 		if (ASmartObject* SmartObj = Cast<ASmartObject>(SObj))
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("Writing to World State"));
+			//UE_LOG(LogGOAP, Warning, TEXT("Writing to World State"));
 			SmartObj->WriteToWorldState(Current);
 
 			LastSmartObjectContainer->RegisteredObjects.Add(SmartObj);
 			if (!BB_Planner->GetBlackboardAsset())
 			{
-				//UE_LOG(LogTemp, Error, TEXT("BlackboardComponent is null"));
+				//UE_LOG(LogGOAP, Error, TEXT("BlackboardComponent is null"));
 				return;
 			}
 
@@ -306,7 +307,7 @@ void UPlannerComponent::UpdateSmartObjects(FWorldState& Current)
 			}
 			else
 			{
-				//UE_LOG(LogTemp, Error, TEXT("No Value Asset for Blackboard Object"));
+				//UE_LOG(LogGOAP, Error, TEXT("No Value Asset for Blackboard Object"));
 			}
 		}
 	}
@@ -335,7 +336,7 @@ void UPlannerComponent::UpdateStack(AActor* Owner)
 
 	if (LastAction && CurrentAction != LastAction)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Executing action: %s"), *CurrentAction->Name.ToString());
+		UE_LOG(LogGOAP, Warning, TEXT("Executing action: %s"), *CurrentAction->Name.ToString());
 	}
 
 	EExitSequenceType Result = CurrentAction->Execute(Owner);
@@ -344,7 +345,7 @@ void UPlannerComponent::UpdateStack(AActor* Owner)
 	{
 	case EExitSequenceType::RUNNING:
 		LastAction = CurrentAction;
-		UE_LOG(LogTemp, Warning, TEXT("Running Action : %s"), *CurrentAction->GetName())
+		UE_LOG(LogGOAP, Warning, TEXT("Running Action : %s"), *CurrentAction->GetName())
 		return;
 
 	case EExitSequenceType::INVALID:
@@ -359,7 +360,7 @@ void UPlannerComponent::UpdateStack(AActor* Owner)
 			for (auto& Effect : CurrentAction->Effects.StateValues)
 			{
 				AgentStateValue.StateValues.FindOrAdd(Effect.Key) = Effect.Value;
-				UE_LOG(LogTemp, Warning, TEXT("Updated CurrentState: %s = %s"),
+				UE_LOG(LogGOAP, Warning, TEXT("Updated CurrentState: %s = %s"),
 				       *Effect.Key, Effect.Value ? TEXT("true") : TEXT("false"));
 			}
 		}
@@ -373,20 +374,20 @@ void UPlannerComponent::UpdateStack(AActor* Owner)
 		return;
 
 	case EExitSequenceType::FAILURE:
-		UE_LOG(LogTemp, Error, TEXT("%s's Action execution ended in failure, please see Execute action for details."),
+		UE_LOG(LogGOAP, Error, TEXT("%s's Action execution ended in failure, please see Execute action for details."),
 		       CurrentAction ? *CurrentAction->Name.ToString() : TEXT("UnknownAction"))
 		CurrentAction = nullptr;
 		OnPlanInvalid.Broadcast();
 		return;
 
 	case EExitSequenceType::DEFAULT:
-		UE_LOG(LogTemp, Error,
+		UE_LOG(LogGOAP, Error,
 		       TEXT("Hidden Enum Type reached, check %s's Execute function to see if it has not been overriden"),
 		       CurrentAction ? *CurrentAction->Name.ToString() : TEXT("UnknownAction"));
 		return;
 
 	default:
-		UE_LOG(LogTemp, Error, TEXT("Impossible Result Type Reached. Please check %s's Execute."),
+		UE_LOG(LogGOAP, Error, TEXT("Impossible Result Type Reached. Please check %s's Execute."),
 		       CurrentAction ? *CurrentAction->Name.ToString() : TEXT("UnknownAction"));
 	}
 }

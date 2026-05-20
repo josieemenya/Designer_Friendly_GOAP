@@ -7,6 +7,8 @@
 #include "Engine/DeveloperSettings.h"
 #include "PlannerComponent.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogGOAP, Log, All);
+
 class UBlackboardComponent;
 
 UCLASS(Config=Game, DefaultConfig)

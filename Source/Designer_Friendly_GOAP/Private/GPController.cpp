@@ -13,6 +13,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "TimerManager.h"
 
+DEFINE_LOG_CATEGORY(LogGPController);
+
 AGPController::AGPController()
 {
 	Planner = CreateDefaultSubobject<UPlannerComponent>("PlannerComponent");
@@ -30,12 +32,12 @@ UGoal* AGPController::GetBestGoal()
 		
 		float utility = Goal->GetUtility(Blackboard);
 		
-		UE_LOG(LogTemp, Warning, TEXT("Evaluating Goal: %s"), *Goal->GetName());
-		UE_LOG(LogTemp, Warning, TEXT("%s Goal Value: %f"), *Goal->GetName(), utility);
+		UE_LOG(LogGPController, Warning, TEXT("Evaluating Goal: %s"), *Goal->GetName());
+		UE_LOG(LogGPController, Warning, TEXT("%s Goal Value: %f"), *Goal->GetName(), utility);
 		
 
 		if (utility < 0){
-			UE_LOG(LogTemp, Error, TEXT("Goal Utility less than zero, Goal Name: %s, Goal Value: %f"), *Goal->GetName(), utility); 			
+			UE_LOG(LogGPController, Error, TEXT("Goal Utility less than zero, Goal Name: %s, Goal Value: %f"), *Goal->GetName(), utility); 			
 		}
 
 		if (BestScore < utility)
@@ -53,7 +55,7 @@ void AGPController::StartPlanning()
 	SetActorTickEnabled(true);
 	if (Planner->ToDoStack.Num() > 0) // don't plan of we have a task
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TASK TASK TASK"));
+		UE_LOG(LogGPController, Warning, TEXT("TASK TASK TASK"));
 		return;
 	}
 	
@@ -62,7 +64,7 @@ void AGPController::StartPlanning()
 	{
 		// then set current state to the top most goal
 		
-		UE_LOG(LogTemp, Warning, TEXT("Updating Current Goal.")); 
+		UE_LOG(LogGPController, Warning, TEXT("Updating Current Goal.")); 
 		
 		FWorldState BaseCurrentState = CurrentState; 
 		
@@ -78,23 +80,23 @@ void AGPController::StartPlanning()
 		
 		if (!CurrentGoal) return;
 		
-		UE_LOG(LogTemp, Warning, TEXT("Goal class: %s"), *CurrentGoal->GetName());
+		UE_LOG(LogGPController, Warning, TEXT("Goal class: %s"), *CurrentGoal->GetName());
 		
 		
 		if (CurrentGoal->bRequiresSmartObject && Planner->AllSmartObjectsNearby.Num() == 0) // if goal needs to interact with smart obj
 		{
-        	//UE_LOG(LogTemp, Warning, TEXT("Skipping planning: no smart objects yet"));
+        	//UE_LOG(LogGPController, Warning, TEXT("Skipping planning: no smart objects yet"));
 			return;
 		}
 		
 		// StartPlanning for real
 		Planner->PlanGoal(BaseCurrentState, CurrentGoal->DesiredState);
-		//UE_LOG(LogTemp, Warning, TEXT("Plan size after planning: %d"), Planner->ToDoStack.Num()); 
+		//UE_LOG(LogGPController, Warning, TEXT("Plan size after planning: %d"), Planner->ToDoStack.Num()); 
 		
 
 		for (auto& Pair : CurrentGoal->DesiredState.StateValues)
 		{
-    		UE_LOG(LogTemp, Warning, TEXT("Goal requires: %s = %s"),
+    		UE_LOG(LogGPController, Warning, TEXT("Goal requires: %s = %s"),
         	*Pair.Key,
         	Pair.Value ? TEXT("true") : TEXT("false"));
 		}
@@ -115,7 +117,7 @@ void AGPController::Replan()
 {
 	if (Planner->ToDoStack.Num() > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TASK TASK"));
+		UE_LOG(LogGPController, Warning, TEXT("TASK TASK"));
 		return;
 	}
 	
@@ -150,20 +152,20 @@ bool AGPController::RegisterSeePlayer(UPlannerComponent* MyPlanner)
 		HasPerception->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), SeeActors);
 	} else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Can't find perception component"));
+		UE_LOG(LogGPController, Warning, TEXT("Can't find perception component"));
 	}
 	
 	if (SeeActors.Num() > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Registering SeeActors"));
+		UE_LOG(LogGPController, Warning, TEXT("Registering SeeActors"));
 		
 	
 	} else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Percieved Nothing"));
+		UE_LOG(LogGPController, Warning, TEXT("Percieved Nothing"));
 	}
 	
-	//UE_LOG(LogTemp, Warning, TEXT("No player found"));
+	//UE_LOG(LogGPController, Warning, TEXT("No player found"));
 	
 	return false;
 }
