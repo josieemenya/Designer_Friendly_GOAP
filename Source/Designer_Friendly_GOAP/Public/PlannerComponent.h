@@ -44,8 +44,8 @@ public :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Goal")
 	FString Name;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Goal")
-	bool bRequiresSmartObject; 
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Goal")
+	//bool bRequiresSmartObject; 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Goal")
 	FWorldState DesiredState; // the desired world state that satisfies the goal
@@ -134,10 +134,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 	UBlackboardComponent* BB_Planner;
-	
-	
-	UFUNCTION(BlueprintCallable, Category="Planner")
-	void AddToAvailableActions(UAction* NewAction);
 
 	TArray<UAction*> FilterSatisfyingActions(TArray<UAction*> Array, const FWorldState& State);
 	
@@ -147,13 +143,13 @@ public:
 	TArray<UAction*> BuildPlan(Node* Last); // keep in planner
 	TArray<UAction*> FilterAvailableActions(TArray<UAction*> Actions, FWorldState CurrentState); // keep in planner
 	
-	UFUNCTION(BlueprintCallable, Category="Planner")
+	UFUNCTION(BlueprintCallable, Category="SmartObject")
 	void UpdateSmartObjects(FWorldState& Current);
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Planner")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="SmartObject")
 	TArray<AActor*> AllSmartObjectsNearby; 
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Planner")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="SmartObject")
 	TObjectPtr<USmartObjectsContainer> LastSmartObjectContainer; 
 
 	
@@ -161,9 +157,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Planner")
 	TArray<UAction*> ToDoStack;  
-	
-	UGoal* DesiredGoal; 
-	TArray<TSubclassOf<UGoal>> Goals;
 	
 	UFUNCTION(BlueprintCallable, Category="Planner")
 	void UpdateStack(AActor* OwningActor);
@@ -183,8 +176,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Planner")
 	TArray<UAction*> ActionList;
 	
-	UFUNCTION(BlueprintCallable, Category="Planner")
-	void SetGoal(TSubclassOf<UGoal> GoalClass);
 	
 	UFUNCTION(BlueprintCallable, Category="Planner")
 	FORCEINLINE bool HasPlan() const { return ToDoStack.Num() > 0; } 

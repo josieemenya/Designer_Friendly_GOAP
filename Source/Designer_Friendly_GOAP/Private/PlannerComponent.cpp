@@ -76,16 +76,6 @@ void UPlannerComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	}
 }
 
-void UPlannerComponent::SetGoal(TSubclassOf<UGoal> GoalClass)
-{
-	Goals.Add(GoalClass);
-}
-
-
-void UPlannerComponent::AddToAvailableActions(UAction* NewAction)
-{
-	//AvailableActions.Add(NewAction);
-}
 
 TArray<UAction*> UPlannerComponent::PlanGoal(FWorldState& InitialWorldState, FWorldState DesiredState)
 {
@@ -355,14 +345,11 @@ void UPlannerComponent::UpdateStack(AActor* Owner)
 		return;
 
 	case EExitSequenceType::SUCCESS:
-		if (auto Bot = Cast<AAIController>(GetOwner()))
+		for (auto& Effect : CurrentAction->Effects.StateValues)
 		{
-			for (auto& Effect : CurrentAction->Effects.StateValues)
-			{
-				AgentStateValue.StateValues.FindOrAdd(Effect.Key) = Effect.Value;
-				UE_LOG(LogGOAP, Warning, TEXT("Updated CurrentState: %s = %s"),
-				       *Effect.Key, Effect.Value ? TEXT("true") : TEXT("false"));
-			}
+			AgentStateValue.StateValues.FindOrAdd(Effect.Key) = Effect.Value;
+			UE_LOG(LogGOAP, Warning, TEXT("Updated CurrentState: %s = %s"),
+				*Effect.Key, Effect.Value ? TEXT("true") : TEXT("false"));
 		}
 		LastAction = CurrentAction;
 		ToDoStack.RemoveAt(0);

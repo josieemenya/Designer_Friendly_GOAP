@@ -83,11 +83,11 @@ void AGPController::StartPlanning()
 		UE_LOG(LogGPController, Warning, TEXT("Goal class: %s"), *CurrentGoal->GetName());
 		
 		
-		if (CurrentGoal->bRequiresSmartObject && Planner->AllSmartObjectsNearby.Num() == 0) // if goal needs to interact with smart obj
+		/*if (CurrentGoal->bRequiresSmartObject && Planner->AllSmartObjectsNearby.Num() == 0) // if goal needs to interact with smart obj
 		{
         	//UE_LOG(LogGPController, Warning, TEXT("Skipping planning: no smart objects yet"));
 			return;
-		}
+		}*/
 		
 		// StartPlanning for real
 		Planner->PlanGoal(BaseCurrentState, CurrentGoal->DesiredState);
