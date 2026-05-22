@@ -1,3 +1,3 @@
-# GOAP Plugin adapted from [A Project](https://github.com/josieemenya/ai-project)
+### GOAP Plugin adapted from a [project](https://github.com/josieemenya/ai-project)
 
-## Made to be as designer friendly as possible
+The Designer Friendly GOAP plugin is exactly what the name intends to be; a designer freind
