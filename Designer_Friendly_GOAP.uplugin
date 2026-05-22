@@ -1,14 +1,14 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "1.0.3",
 	"FriendlyName": "Designer_Friendly_GOAP",
 	"Description": "A designer friendly GOAP / utility system where you can customize your own actions in blueprint & goals, and how you score goals",
 	"Category": "Gameplay",
-	"EngineVersion": "5.4",
+	"EngineVersion": "5.7",
 	"CreatedBy": "Josephine Emenya",
 	"CreatedByURL": "https://linkedin.com/in/josieemenya",
-	"DocsURL": "",
+	"DocsURL": "https://josephineemenya.co.uk/goap-plugin-docs",
 	"MarketplaceURL": "",
 	"SupportURL": "",
 	"CanContainContent": true,
@@ -20,7 +20,7 @@
 			"Name": "Designer_Friendly_GOAP",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
-			"PlatformAllowList" : [
+			"PlatformAllowList": [
 				"Win64"
 			]
 		}
